@@ -17,6 +17,10 @@ style = "pep440"
 files = ["src/epyq/__init__.py"]
 
 [[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
+
+[[tool.poetry.source]]
 name = "epc-power"
 url = "https://epc-power-us-890711758583.d.codeartifact.us-east-2.amazonaws.com/pypi/epc-power/simple"
 priority = "explicit"

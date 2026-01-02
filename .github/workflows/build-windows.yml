@@ -27,8 +27,13 @@ jobs:
         pip install poetry
         poetry --version
       
+    - name: Configure Poetry to use PyPI only
+      run: |
+        poetry source remove epc-power || true
+        poetry source remove third-party || true
+      
     - name: Install dependencies
-      run: poetry install
+      run: poetry install --no-cache
       
     - name: Install PyInstaller
       run: pip install pyinstaller
