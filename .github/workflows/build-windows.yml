@@ -32,8 +32,11 @@ jobs:
         poetry source remove epc-power || true
         poetry source remove third-party || true
       
+    - name: Update lock file
+      run: poetry lock --no-update
+      
     - name: Install dependencies
-      run: poetry install --no-cache
+      run: poetry install
       
     - name: Install PyInstaller
       run: pip install pyinstaller
