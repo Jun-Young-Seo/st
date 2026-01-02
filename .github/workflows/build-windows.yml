@@ -22,18 +22,13 @@ jobs:
       with:
         python-version: '3.8'
         
+    - name: Remove AWS sources from pyproject.toml files
+      run: python fix_pyproject.py
+      
     - name: Install Poetry
       run: |
         pip install poetry
         poetry --version
-      
-    - name: Fix submodule pyproject.toml to use PyPI
-      run: |
-        $file = "sub/epyqlib/pyproject.toml"
-        $content = Get-Content $file -Raw
-        $content = $content -replace '\[\[tool\.poetry\.source\]\]\s*name = "epc-power"[^\[]+', ''
-        $content = $content -replace '\[\[tool\.poetry\.source\]\]\s*name = "third-party"[^\[]+', ''
-        $content | Set-Content $file
       
     - name: Remove old lock files and regenerate
       run: |
