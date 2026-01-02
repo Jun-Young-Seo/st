@@ -1,0 +1,52 @@
+name: Build Windows EXE
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:  # 수동 실행 가능
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive  # sub/epyqlib submodule 포함
+        
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.8'
+        
+    - name: Install Poetry
+      run: |
+        pip install poetry
+        poetry --version
+      
+    - name: Install dependencies
+      run: poetry install
+      
+    - name: Install PyInstaller
+      run: pip install pyinstaller
+      
+    - name: Build Windows EXE
+      run: python deploy_win.py
+      
+    - name: Upload EXE as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: epyq-windows-exe
+        path: dist/epyq.exe
+        if-no-files-found: error
+        
+    - name: Upload full dist folder (참고용)
+      uses: actions/upload-artifact@v3
+      with:
+        name: epyq-windows-dist-full
+        path: dist/
+        if-no-files-found: warn
+
