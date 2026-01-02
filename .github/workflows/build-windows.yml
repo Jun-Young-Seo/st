@@ -22,25 +22,35 @@ jobs:
       with:
         python-version: '3.8'
         
-    - name: Remove AWS sources from pyproject.toml files
-      run: python fix_pyproject.py
-      
-    - name: Install Poetry
+    - name: Install dependencies directly with pip
       run: |
-        pip install poetry
-        poetry --version
-      
-    - name: Remove old lock files and regenerate
-      run: |
-        Remove-Item poetry.lock -ErrorAction SilentlyContinue
-        Remove-Item sub/epyqlib/poetry.lock -ErrorAction SilentlyContinue
-        poetry lock
-      
-    - name: Install dependencies
-      run: poetry install
-      
-    - name: Install PyInstaller
-      run: pip install pyinstaller
+        # Install epyqlib dependencies first
+        cd sub/epyqlib
+        pip install alqtendpy==0.0.4 arrow==0.12.1 appdirs==1.4.3 "attrs>=19.3.0" bitstruct==6.0.0
+        pip install "boto3>=1.26.77" boto3-type-annotations==0.3.1 canmatrix==0.9.1 certifi==2020.6.20
+        pip install "click<=7.1.2" dulwich==0.20.6 fab==3.0.0 GitPython==2.1.15 graham==0.1.11
+        pip install marshmallow==2.16.3 natsort==5.5.0 paho-mqtt==1.4.0 Pint==0.19.2
+        pip install "PyQt5>=5.13.0" PyQtChart==5.14.0 python-can==4.0.0 qt5reactor==0.6.3
+        pip install requests==2.27.1 Twisted==21.2.0 treq==21.1.0
+        pip install git+https://github.com/eliben/pyelftools@27941c50fef8cff8ef991419511664154c8cdf52
+        pip install -e .
+        cd ../..
+        
+        # Install main project dependencies
+        pip install alqtendpy==0.0.4 graham==0.1.11 python-can==4.0.0 bitstruct==6.0.0
+        pip install Twisted==21.2.0 qt5reactor==0.6.3 "attrs>=19.3.0" natsort==5.5.0
+        pip install arrow==0.12.1 PyQtChart==5.14.0 pysunspec==2.1.1 pluggy==0.12.0
+        pip install appdirs==1.4.3 "boto3>=1.26.77" boto3-type-annotations==0.3.1 certifi==2020.6.20
+        pip install paho-mqtt==1.4.0 treq==21.1.0 PyQt5==5.14.1 requests==2.27.1
+        pip install canmatrix==0.9.1 click==7.1.2 pywin32==306
+        pip install git+https://github.com/eliben/pyelftools@27941c50fef8cff8ef991419511664154c8cdf52
+        
+        # Install dev dependencies
+        pip install black==20.8b1 gitignoreio==0.1.5 "pyinstaller~=4.5" pyinstaller-hooks-contrib==2022.10
+        pip install pytest==6.2.4 pytest-rerunfailures==10.3 pytest-qt==4.0.2 "pytest-twisted<=1.13.4"
+        
+        # Install main project in editable mode
+        pip install -e .
       
     - name: Build Windows EXE
       run: python deploy_win.py
