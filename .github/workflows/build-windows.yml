@@ -27,11 +27,6 @@ jobs:
         pip install poetry
         poetry --version
       
-    - name: Configure Poetry to use PyPI only
-      run: |
-        poetry source remove epc-power || true
-        poetry source remove third-party || true
-      
     - name: Update lock file
       run: poetry lock --no-update
       

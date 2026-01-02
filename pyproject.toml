@@ -20,16 +20,6 @@ files = ["src/epyq/__init__.py"]
 name = "PyPI"
 priority = "primary"
 
-[[tool.poetry.source]]
-name = "epc-power"
-url = "https://epc-power-us-890711758583.d.codeartifact.us-east-2.amazonaws.com/pypi/epc-power/simple"
-priority = "explicit"
-
-[[tool.poetry.source]]
-name = "third-party"
-url = "https://epc-power-us-890711758583.d.codeartifact.us-east-2.amazonaws.com/pypi/third-party/simple"
-priority = "explicit"
-
 [tool.poetry.dependencies]
 python = ">=3.8,<3.11"
 
