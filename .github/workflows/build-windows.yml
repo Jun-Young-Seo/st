@@ -13,12 +13,12 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         submodules: recursive  # sub/epyqlib submodule 포함
         
     - name: Set up Python 3.8
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.8'
         
@@ -37,14 +37,14 @@ jobs:
       run: python deploy_win.py
       
     - name: Upload EXE as artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: epyq-windows-exe
         path: dist/epyq.exe
         if-no-files-found: error
         
     - name: Upload full dist folder (참고용)
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: epyq-windows-dist-full
         path: dist/
