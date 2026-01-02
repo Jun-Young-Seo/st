@@ -27,8 +27,10 @@ jobs:
         pip install poetry
         poetry --version
       
-    - name: Update lock file
-      run: poetry lock --no-update
+    - name: Remove old lock file and regenerate
+      run: |
+        Remove-Item poetry.lock -ErrorAction SilentlyContinue
+        poetry lock
       
     - name: Install dependencies
       run: poetry install
