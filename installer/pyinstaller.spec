@@ -43,11 +43,18 @@ for dir_name, subdirs, files in os.walk(search_in):
 for format in canmatrix.formats.moduleList:
     hidden_imports.add('canmatrix.formats.' + format)
 
-data_files.append(('PCANBasic.dll', '.'))
-data_files.append((
-    os.path.join('src', 'libs', 'fontawesome', 'fonts', 'FontAwesome.otf'),
-    '.'
-))
+# Add PCANBasic.dll if it exists
+if os.path.exists('PCANBasic.dll'):
+    data_files.append(('PCANBasic.dll', '.'))
+else:
+    print('Warning: PCANBasic.dll not found, skipping')
+
+# Add FontAwesome if it exists
+fontawesome_path = os.path.join('src', 'libs', 'fontawesome', 'fonts', 'FontAwesome.otf')
+if os.path.exists(os.path.join('..', fontawesome_path)):
+    data_files.append((fontawesome_path, '.'))
+else:
+    print('Warning: FontAwesome.otf not found, skipping')
 
 print('-- data files')
 for data_file in data_files:
@@ -77,21 +84,32 @@ pyz = PYZ(
 exe = EXE(
     pyz,
     a.scripts,
-    exclude_binaries=True,
+    a.binaries,      # 모든 바이너리 포함
+    a.zipfiles,      # 모든 zip 파일 포함
+    a.datas,         # 모든 데이터 파일 포함
+    [],
     name='epyq',
     debug=False,
+    bootloader_ignore_signals=False,
     strip=False,
     upx=True,
+    upx_exclude=[],
+    runtime_tmpdir=None,
     console=False,
+    disable_windowed_traceback=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
     icon=os.path.join('..', 'src', 'epyq', 'icon.ico'),
 )
 
-coll = COLLECT(
-    exe,
-    a.binaries,
-    a.zipfiles,
-    a.datas,
-    strip=False,
-    upx=True,
-    name='epyq',
-)
+# COLLECT 블록 제거됨 - 단일 exe 파일 생성
+# coll = COLLECT(
+#     exe,
+#     a.binaries,
+#     a.zipfiles,
+#     a.datas,
+#     strip=False,
+#     upx=True,
+#     name='epyq',
+# )
